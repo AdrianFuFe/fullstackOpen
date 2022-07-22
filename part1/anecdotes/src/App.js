@@ -9,26 +9,19 @@ const anecdotes = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ];
 
-function random(min, max) {
-  return Math.floor((Math.random() * (max - min + 1)) + min);
-}
+const Button = ({onClick,text}) => (<button onClick={onClick}> {text} </button>)
 
-let randomAnecdote = random(0,anecdotes.length);
-
-const setToSelected = () => setSelected(randomAnecdote);
-console.log(randomAnecdote)
+const randomAnecdote = () => Math.floor(Math.random() * anecdotes.length);
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
 
-  setToSelected()
-
   return (
-    <div>
-      {props.anecdotes[selected]}
-    </div>
+    <>
+      <p>{anecdotes[selected]}</p>
+      <Button onClick={() => setSelected(randomAnecdote())} text="next anecdote" />
+    </>
   )
 }
-
 
 export default App;
