@@ -9,26 +9,48 @@ const anecdotes = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ];
 
+//COMPONENTS
 const Button = ({onClick,text}) => (<button onClick={onClick}> {text} </button>)
-
-const randomAnecdote = () => Math.floor(Math.random() * anecdotes.length);
-
-const handlePoints = ({votes}) => {
-  const copy = [...{votes}];
-  console.log(randomAnecdote())
-  copy[randomAnecdote()] +=1;
+const Title = ({text}) => (<h1> {text} </h1>)
+const MostVoted = ({votes, anecdotes}) =>  {
+  const highVote = Math.max(...votes)
+  const mostVoted = anecdotes[votes.indexOf(Math.max(...votes))]
+  if (highVote !== 0){
+    return (
+      <>
+        <p>{mostVoted}</p>
+        <p>has {highVote} votes</p>
+      </> 
+    )
+  }else{
+    return ("No votes yet")
+  }
 }
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0);
-  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
+  
+  const randomAnecdote = () => {
+    const random = Math.floor(Math.random() * anecdotes.length);
+    setSelected(random)
+  }
+  const handleVotes = () => {
+    const copyVotes = [...votes];
+    copyVotes[selected] +=1;
+    setVotes(copyVotes)
+  }
+  
   return (
     <>
+      <Title text="Anecdote of the day" />
       <p>{anecdotes[selected]}</p>
-      <p>has {votes} votes</p>
-      <Button onClick={() => setVotes(handlePoints())} text="vote" /> 
-      <Button onClick={() => setSelected(randomAnecdote())} text="next anecdote" />
+      <p>has {votes[selected]} votes</p>
+      <Button onClick={handleVotes} text="vote" /> 
+      <Button onClick={randomAnecdote} text="next anecdote" />
+      <Title text="Anecdote with most votes" /> 
+      <MostVoted anecdotes={anecdotes} votes={votes} />
     </>
   )
 }
